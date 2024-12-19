@@ -82,7 +82,15 @@ const App: React.FC = () => {
       <ImageGallery images={images} onImageClick={openModal} />
       {loading && <Loader />}
       {images.length > 0 && !loading && <LoadMoreBtn onClick={loadMoreImages} />}
-      {modalImage && <ImageModal image={modalImage} onClose={closeModal} />}
+      {modalImage && (
+  <ImageModal
+    image={{
+      urls: { regular: modalImage.urls.small },
+      alt_description: modalImage.alt_description,
+    }}
+    onClose={closeModal}
+  />
+)}
     </div>
   );
 };
