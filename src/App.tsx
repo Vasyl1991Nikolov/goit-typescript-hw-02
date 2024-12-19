@@ -10,15 +10,31 @@ import { Toaster } from 'react-hot-toast';
 
 const ACCESS_KEY = 'TSPYXE9lC1w6AVUHuEDi2N3pFqp99tyG9ouVhNJm6dY';
 
-const App = () => {
-  const [images, setImages] = useState([]);
-  const [query, setQuery] = useState('');
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [modalImage, setModalImage] = useState(null);
+export interface ImageType {
+  id: string;
+  urls: { small: string; full: string };
+  alt_description: string | null;
+  user: { name: string };
+}
 
-  const fetchImages = async (searchQuery, pageNumber = 1) => {
+interface AppState {
+  images: ImageType[];
+  query: string;
+  page: number;
+  loading: boolean;
+  error: string | null;
+  modalImage: ImageType | null;
+}
+
+const App: React.FC = () => {
+  const [images, setImages] = useState<AppState['images']>([]);
+  const [query, setQuery] = useState<AppState['query']>('');
+  const [page, setPage] = useState<AppState['page']>(1);
+  const [loading, setLoading] = useState<AppState['loading']>(false);
+  const [error, setError] = useState<AppState['error']>(null);
+  const [modalImage, setModalImage] = useState<AppState['modalImage']>(null);
+
+  const fetchImages = async (searchQuery: string, pageNumber: number = 1): Promise<void> => {
     setLoading(true);
     setError(null);
 
@@ -27,7 +43,7 @@ const App = () => {
         params: { query: searchQuery, page: pageNumber, per_page: 12 },
         headers: { Authorization: `Client-ID ${ACCESS_KEY}` },
       });
-      const fetchedImages = response.data.results;
+      const fetchedImages: ImageType[] = response.data.results;
 
       setImages((prev) => (pageNumber === 1 ? fetchedImages : [...prev, ...fetchedImages]));
     } catch (err) {
@@ -37,24 +53,24 @@ const App = () => {
     }
   };
 
-  const handleSearch = (newQuery) => {
+  const handleSearch = (newQuery: string): void => {
     setQuery(newQuery);
     setPage(1);
     setImages([]);
     fetchImages(newQuery, 1);
   };
 
-  const loadMoreImages = () => {
+  const loadMoreImages = (): void => {
     const nextPage = page + 1;
     setPage(nextPage);
     fetchImages(query, nextPage);
   };
 
-  const openModal = (image) => {
+  const openModal = (image: ImageType): void => {
     setModalImage(image);
   };
 
-  const closeModal = () => {
+  const closeModal = (): void => {
     setModalImage(null);
   };
 

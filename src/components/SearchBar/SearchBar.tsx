@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import toast from 'react-hot-toast';
 
-const SearchBar = ({ onSubmit }) => {
-  const [query, setQuery] = useState('');
+interface SearchBarProps {
+  onSubmit: (query: string) => void; 
+}
 
-  const handleInputChange = (evt) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
+  const [query, setQuery] = useState<string>('');
+
+  const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(evt.target.value);
   };
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
     if (query.trim() === '') {
@@ -36,10 +39,6 @@ const SearchBar = ({ onSubmit }) => {
       </form>
     </header>
   );
-};
-
-SearchBar.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default SearchBar;

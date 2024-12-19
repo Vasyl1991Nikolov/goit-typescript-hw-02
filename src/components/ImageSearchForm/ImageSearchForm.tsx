@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 
-const ImageSearchForm = ({ onSearch }) => {
-  const [query, setQuery] = useState('');
+interface ImageSearchFormProps {
+  onSearch: (query: string) => void;
+}
 
-  const handleSubmit = (e) => {
+const ImageSearchForm: React.FC<ImageSearchFormProps> = ({ onSearch }) => {
+  const [query, setQuery] = useState<string>(''); 
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (query.trim()) {
       onSearch(query);
@@ -16,7 +20,9 @@ const ImageSearchForm = ({ onSearch }) => {
         type="text"
         placeholder="Search for images..."
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setQuery(e.target.value)
+        }
       />
       <button type="submit">Search</button>
     </form>
